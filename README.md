@@ -1,10 +1,10 @@
 # dm-data-sync
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/3bff43ab-2e54-4f1a-b037-f24ad8be75ae/deploy-status)](https://app.netlify.com/sites/members-only/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/3bff43ab-2e54-4f1a-b037-f24ad8be75ae/deploy-status)](https://app.netlify.com/sites/dm-data-sync/deploys)
 
 This is a [Next.js](https://nextjs.org/) v9.4.0 project bootstrapped with [`create-next-app`](https://github.com/zeit/next.js/tree/canary/packages/create-next-app) and set up to be instantly deployed to [Netlify](https://url.netlify.com/Bk4UicocL)!
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/cassidoo/members-only&utm_source=github&utm_medium=identitystarter-cs&utm_campaign=devex)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/cassidoo/dm-data-sync&utm_source=github&utm_medium=identitystarter-cs&utm_campaign=devex)
 
 (If you click this button, it will create a new repo for you that looks exactly like this one, and sets that repo up immediately for deployment on Netlify)
 
@@ -26,7 +26,7 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 
 **Option one:** One-click deploy
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/cassidoo/members-only&utm_source=github&utm_medium=identitystarter-cs&utm_campaign=devex)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/cassidoo/dm-data-sync&utm_source=github&utm_medium=identitystarter-cs&utm_campaign=devex)
 
 **Option two:** Manual clone
 
