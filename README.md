@@ -1,4 +1,4 @@
-# members-only
+# dm-data-sync
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/3bff43ab-2e54-4f1a-b037-f24ad8be75ae/deploy-status)](https://app.netlify.com/sites/members-only/deploys)
 
