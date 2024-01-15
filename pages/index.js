@@ -9,6 +9,7 @@ import Footer from '@components/Footer'
 
 export default function Home() {
   let [loggedIn, setLoggedIn] = useState(netlifyAuth.isAuthenticated)
+  const { user } = netlifyAuth
 
   useEffect(() => {
     let isCurrent = true
@@ -23,6 +24,23 @@ export default function Home() {
     }
   }, [])
 
+  useEffect(() => {
+    console.log('loggedIn', loggedIn)
+  }, [loggedIn])
+
+
+  const syncData = () => {
+    if (user) {
+      fetch('/.netlify/functions/full-sync', user && {
+        headers: {
+          Authorization:  'Bearer ' + user.token.access_token
+        }
+      })
+      .then(res => res.json())
+      .then(data => console.log(data))
+    }
+  }
+
   let login = () => {
     netlifyAuth.authenticate((user) => {
       setLoggedIn(!!user)
@@ -32,29 +50,42 @@ export default function Home() {
   return (
     <div className="container">
       <Head>
-        <title>Members Only</title>
+        <title>Data sync</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
-        <Header text={'Welcome to the Public Space™'} />
-        <p className="description">
-          We are in a public space, for the people who aren't able to access the super fancy
-          members-only area. You hear snobbish laughter in the distance.
-        </p>
         {loggedIn ? (
           <div>
-            You're logged in! Please do visit{' '}
+            You're logged in!
             <Link href="/protected">
-              <a>the special, members-only space.</a>
+              the special, members-only space.
             </Link>
+
+            <hr />
+            <button
+              onClick={syncData}
+            >
+              Syn data
+            </button>
+              <hr />
+            <button
+              onClick={() => {
+                netlifyAuth.signout(() => {
+                  setLoggedIn(false)
+                  setUser(null)
+                })
+              }}
+            >
+              Log out.
+            </button>
           </div>
         ) : (
-          <button onClick={login}>Log in here to access the members-only area.</button>
+          <button onClick={login}>Log in.</button>
         )}
       </main>
 
-      <Footer />
+      {/* <Footer /> */}
 
       <style jsx>{`
         .container {

@@ -15,6 +15,7 @@ const netlifyAuth = {
     netlifyIdentity.open()
     netlifyIdentity.on('login', (user) => {
       this.user = user
+      console.log('useruser 11', user);
       callback(user)
       netlifyIdentity.close()
     })
