@@ -43,6 +43,7 @@ const stylesBtnSync = {
 
 export default function Home() {
   let [loggedIn, setLoggedIn] = useState(netlifyAuth.isAuthenticated)
+  const [notification, setNotification] = useState(null)
   const { user } = netlifyAuth
 
   useEffect(() => {
@@ -58,6 +59,12 @@ export default function Home() {
     }
   }, [])
 
+  useEffect(() => {
+    if (notification) {
+      setTimeout(() => setNotification(null), 5000)
+    }
+  }, [notification])
+
   const syncData = () => {
     if (user) {
       fetch('/.netlify/functions/full-sync', user && {
@@ -66,7 +73,13 @@ export default function Home() {
         }
       })
         .then(res => res.json())
-        .then(data => console.log(data))
+        .then(data => setNotification(data))
+        .catch((err) => {
+          setNotification({
+            "statusCode": 500,
+            "body": err.message
+          })
+        })
     }
   }
 
@@ -75,6 +88,7 @@ export default function Home() {
       setLoggedIn(!!user)
     })
   }
+
 
   return (
     <>
@@ -111,10 +125,35 @@ export default function Home() {
             </button>
           ) : null}
         </main>
+        {notification ? <div className={`notification notification--${notification?.statusCode === 200 ? 'ok' : 'error'}`}>{notification.body}</div> : null}
 
         {/* <Footer /> */}
 
         <style jsx>{`
+        .notification {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          height: 60px;
+          position: fixed;
+          bottom: 0px;
+          border-top: 2px solid;
+          color: #fff;
+        }
+
+        .notification--ok {
+          background: #83c552;
+          border-top-color: #a5d5a5;
+        }
+
+        .notification--error {
+          background: #d53b4f;
+          border-top-color: #970002;
+        }
+
+
         .container {
           height: 100vh;
           display: flex;
