@@ -65,24 +65,26 @@ export default function Home() {
     }
   }, [notification])
 
-  const syncData = () => {
+  const syncData = async () => {
     if (user) {
-      fetch('/.netlify/functions/full-sync', user && {
-        headers: {
-          Authorization: 'Bearer ' + user.token.access_token
-        }
-      })
-        .then(res => res.json())
-        .then(data => setNotification({
-          "statusCode": res.statusCode,
-          'message': data
-        }))
-        .catch((err) => {
-          setNotification({
-            "statusCode": 500,
-            "body": err
-          })
+      try {
+        const request = await fetch('/.netlify/functions/full-sync', user && {
+          headers: {
+            Authorization: 'Bearer ' + user.token.access_token
+          }
         })
+        const response = await request.json()
+        setNotification({
+          "statusCode": request.statusCode,
+          'message': response
+        })
+      } catch (err) {
+        setNotification({
+          "statusCode": 500,
+          "body": err
+        })
+      }
+
     }
   }
 
