@@ -28,7 +28,9 @@ export const handler: Handler = async (event, context) => {
       .then(() => {
         return {
           statusCode: 200,
-          body: 'Synchronization is running. This process can take up to 10 minutes, depending on the size of the data.',
+          body: {
+            message: 'Synchronization is running. This process can take up to 10 minutes, depending on the size of the data.'
+          },
         }
       })
       .catch((err) => {

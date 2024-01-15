@@ -77,7 +77,7 @@ export default function Home() {
         .catch((err) => {
           setNotification({
             "statusCode": 500,
-            "body": err.message
+            "body": err
           })
         })
     }
@@ -125,7 +125,7 @@ export default function Home() {
             </button>
           ) : null}
         </main>
-        {notification ? <div className={`notification notification--${notification?.statusCode === 200 ? 'ok' : 'error'}`}>{notification.body}</div> : null}
+        {notification ? <div className={`notification notification--${notification?.statusCode === 200 ? 'ok' : 'error'}`}>{notification?.body?.message}</div> : null}
 
         {/* <Footer /> */}
 
