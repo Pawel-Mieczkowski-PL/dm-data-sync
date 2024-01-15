@@ -289,6 +289,12 @@ export const sanityAlgolia = indexer(
 export const handler: Handler = async (event, context) => {
   // Tip: Add webhook secrets to verify that the request is coming from Sanity.
   // See more at: https://www.sanity.io/docs/webhooks#bfa1758643b3
+  if (!context?.clientContext?.user) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({ mssg: 'function update: ah ah ah, you must be logged into see this' })
+    }
+  }
 
   if (
     event.headers['content-type'] !== 'application/json' ||

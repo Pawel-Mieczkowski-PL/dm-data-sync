@@ -2,9 +2,6 @@ import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 
-import Header from '@components/Header'
-import Footer from '@components/Footer'
-
 import netlifyAuth from '../netlifyAuth.js'
 
 export default function Protected() {
@@ -34,7 +31,6 @@ export default function Protected() {
 
       {loggedIn ? (
         <main>
-          <Header text={'Welcome to the Private Space™'} />
           <p className="description">
             Wow, secrets are super cool. Welcome {user?.user_metadata.full_name}!
           </p>
@@ -58,7 +54,6 @@ export default function Protected() {
         </main>
       )}
 
-      <Footer />
 
       <style jsx>{`
         .container {

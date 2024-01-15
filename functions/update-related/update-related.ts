@@ -3,6 +3,7 @@ import { sanity, sanityAlgolia } from '../update/update'
 
 export const handler: Handler = async (event, context) => {
   {
+
     const _sanity = sanity // configured Sanity client
     const _sanityAlgolia = sanityAlgolia // configured sanity-algolia
 

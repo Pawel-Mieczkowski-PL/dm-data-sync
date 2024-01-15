@@ -1,11 +1,29 @@
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
-import Link from 'next/link'
 
 import netlifyAuth from '../netlifyAuth.js'
 
-import Header from '@components/Header'
-import Footer from '@components/Footer'
+
+const stylesHeader = {
+  display: "flex",
+  justifyContent: "space-between",
+  padding: '20px'
+}
+
+const stylesBtnAuth = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  padding: '20px',
+  background: "none",
+  height: "40px",
+  border: "0.5px solid black",
+  fontWeight:"bold",
+  textTransform: "uppercase",
+  cursor: "pointer"
+}
+
+
 
 export default function Home() {
   let [loggedIn, setLoggedIn] = useState(netlifyAuth.isAuthenticated)
@@ -24,21 +42,15 @@ export default function Home() {
     }
   }, [])
 
-  useEffect(() => {
-    console.log('loggedIn', loggedIn)
-  }, [loggedIn])
-
-
   const syncData = () => {
-    console.log('syncData', user);
     if (user) {
       fetch('/.netlify/functions/full-sync', user && {
         headers: {
-          Authorization:  'Bearer ' + user.token.access_token
+          Authorization: 'Bearer ' + user.token.access_token
         }
       })
-      .then(res => res.json())
-      .then(data => console.log(data))
+        .then(res => res.json())
+        .then(data => console.log(data))
     }
   }
 
@@ -49,46 +61,48 @@ export default function Home() {
   }
 
   return (
-    <div className="container">
-      <Head>
-        <title>Data sync</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main>
+    <>
+      <header style={stylesHeader}>
+        <img src="./dm-logo.svg" alt="design miami logo" width={100} />
         {loggedIn ? (
-          <div>
-            You're logged in!
-            <Link href="/protected">
-              the special, members-only space.
-            </Link>
-
-            <hr />
-            <button
-              onClick={syncData}
-            >
-              Syn data
-            </button>
-              <hr />
-            <button
-              onClick={() => {
-                netlifyAuth.signout(() => {
-                  setLoggedIn(false)
-                  setUser(null)
-                })
-              }}
-            >
-              Log out.
-            </button>
-          </div>
+          <button
+            style={stylesBtnAuth}
+            onClick={() => {
+              netlifyAuth.signout(() => {
+                setLoggedIn(false)
+              })
+            }}
+          >
+            Log out
+          </button>
         ) : (
-          <button onClick={login}>Log in.</button>
+          <button style={stylesBtnAuth} onClick={login}>Log in</button>
         )}
-      </main>
+      </header>
+      <div className="container">
+        <Head>
+          <title>Data sync</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
 
-      {/* <Footer /> */}
+        <main>
+          {loggedIn ? (
+            <div>
+              <hr />
+              <button
+                onClick={syncData}
+              >
+                Syn data
+              </button>
+              <hr />
 
-      <style jsx>{`
+            </div>
+          ) : null}
+        </main>
+
+        {/* <Footer /> */}
+
+        <style jsx>{`
         .container {
           height: 100vh;
           display: flex;
@@ -114,7 +128,7 @@ export default function Home() {
         }
       `}</style>
 
-      <style jsx global>{`
+        <style jsx global>{`
         html,
         body {
           padding: 0;
@@ -127,6 +141,7 @@ export default function Home() {
           box-sizing: border-box;
         }
       `}</style>
-    </div>
+      </div>
+    </>
   )
 }

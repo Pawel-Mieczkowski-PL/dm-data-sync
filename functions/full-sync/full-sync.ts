@@ -4,6 +4,13 @@ import { sanity, sanityAlgolia } from '../update/update'
 export const handler: Handler = async (event, context) => {
   {
 
+    if (!context?.clientContext?.user) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({ mssg: 'function full-sync: ah ah ah, you must be logged into see this' })
+      }
+    }
+
     const _sanity = sanity // configured Sanity client
     const _sanityAlgolia = sanityAlgolia // configured sanity-algolia
 

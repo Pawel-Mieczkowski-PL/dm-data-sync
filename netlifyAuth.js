@@ -6,6 +6,7 @@ const netlifyAuth = {
   initialize(callback) {
     window.netlifyIdentity = netlifyIdentity
     netlifyIdentity.on('init', (user) => {
+      this.user = user
       callback(user)
     })
     netlifyIdentity.init()
@@ -15,7 +16,6 @@ const netlifyAuth = {
     netlifyIdentity.open()
     netlifyIdentity.on('login', (user) => {
       this.user = user
-      console.log('useruser 11', user);
       callback(user)
       netlifyIdentity.close()
     })
