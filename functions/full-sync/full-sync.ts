@@ -4,11 +4,6 @@ import { sanity, sanityAlgolia } from '../update/update'
 export const handler: Handler = async (event, context) => {
   {
 
-    return {
-      statusCode: 200,
-      body: 'xxx ' + process.env['ALGOLIA_APPLICATION_ID'],
-    }
-
     const _sanity = sanity // configured Sanity client
     const _sanityAlgolia = sanityAlgolia // configured sanity-algolia
 
