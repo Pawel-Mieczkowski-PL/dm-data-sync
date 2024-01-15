@@ -73,7 +73,10 @@ export default function Home() {
         }
       })
         .then(res => res.json())
-        .then(data => setNotification(data))
+        .then(data => setNotification({
+          "statusCode": res.statusCode,
+          'message': data
+        }))
         .catch((err) => {
           setNotification({
             "statusCode": 500,
