@@ -18,9 +18,25 @@ const stylesBtnAuth = {
   background: "none",
   height: "40px",
   border: "0.5px solid black",
-  fontWeight:"bold",
+  fontWeight: "bold",
   textTransform: "uppercase",
   cursor: "pointer"
+}
+
+const stylesBtnSync = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  padding: '20px',
+  background: "none",
+  height: "80px",
+  minWidth: "50vw",
+  border: "0.5px solid black",
+  fontWeight: "bold",
+  textTransform: "uppercase",
+  cursor: "pointer",
+  fontSize: "40px",
+  borderRadius: "20px"
 }
 
 
@@ -87,16 +103,12 @@ export default function Home() {
 
         <main>
           {loggedIn ? (
-            <div>
-              <hr />
-              <button
-                onClick={syncData}
-              >
-                Syn data
-              </button>
-              <hr />
-
-            </div>
+            <button
+              style={stylesBtnSync}
+              onClick={syncData}
+            >
+              Syn data
+            </button>
           ) : null}
         </main>
 
