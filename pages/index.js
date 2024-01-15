@@ -30,6 +30,7 @@ export default function Home() {
 
 
   const syncData = () => {
+    console.log('syncData', user);
     if (user) {
       fetch('/.netlify/functions/full-sync', user && {
         headers: {
