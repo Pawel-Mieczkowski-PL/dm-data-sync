@@ -75,7 +75,8 @@ export default function Home() {
         })
         const response = await request.json()
         setNotification({
-          "statusCode": request.statusCode,
+          // "statusCode": request.status,
+          "statusCode": 200,
           'message': response
         })
       } catch (err) {
