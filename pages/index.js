@@ -77,6 +77,10 @@ export default function Home() {
         })
         console.log('request', request)
         const response = await request.json()
+        console.log('xxx', {
+          "statusCode": request.status,
+          'body': response
+        })
         setNotification({
           "statusCode": request.status,
           // "statusCode": 200,
@@ -134,7 +138,7 @@ export default function Home() {
             </button>
           ) : null}
         </main>
-        {notification ? <div className={`notification notification--${notification?.statusCode === 200 ? 'ok' : 'error'}`}>{notification?.message}</div> : null}
+        {notification ? <div className={`notification notification--${notification?.statusCode === 200 ? 'ok' : 'error'}`}>{notification?.body?.message}</div> : null}
 
         {/* <Footer /> */}
 
