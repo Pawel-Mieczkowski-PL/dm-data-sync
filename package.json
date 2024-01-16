@@ -9,15 +9,16 @@
     "export": "next export"
   },
   "dependencies": {
-    "netlify-identity-widget": "^1.8.0",
-    "next": "^14.0.4",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "@material/web": "^1.1.1",
     "@netlify/functions": "^1.6.0",
     "@sanity/client": "^6.4.9",
     "@types/node": "^14.18.58",
     "algoliasearch": "^4.5.1",
     "dotenv": "^16.3.1",
+    "netlify-identity-widget": "^1.8.0",
+    "next": "^14.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "sanity-algolia": "^1.1.0",
     "stopword": "^1.0.3",
     "string-strip-html": "^13.4.3"
