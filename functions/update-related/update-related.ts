@@ -11,7 +11,7 @@ export const handler: Handler = async (event, context) => {
     const relatedTypes = ['seller', 'designer', 'category']
     const types = ['product']
     const relatedIds = JSON.stringify(JSON.parse(event.body).ids?.updated)
-    console.log('relatedIds', relatedIds)
+    // console.log('relatedIds', relatedIds)
     //const query = `* [_type in $types && references("${relatedIds}") &&!(_id in path("drafts.**"))][]._id`
     const query = `* [_id in ${relatedIds}][]{
       _type in ["designer","seller","materials"] => {
