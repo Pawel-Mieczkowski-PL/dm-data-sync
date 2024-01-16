@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import netlifyIdentity from 'netlify-identity-widget'
 import Head from 'next/head'
 
 import netlifyAuth from '../netlifyAuth.js'
@@ -44,7 +45,11 @@ const stylesBtnSync = {
 export default function Home() {
   let [loggedIn, setLoggedIn] = useState(netlifyAuth.isAuthenticated)
   const [notification, setNotification] = useState(null)
-  const { user } = netlifyAuth
+  const user = netlifyIdentity.currentUser();
+	const validUser = (user != null)
+
+  // console.log('user', user, validUser)
+  // const { user } = netlifyAuth
 
   useEffect(() => {
     let isCurrent = true
@@ -66,21 +71,16 @@ export default function Home() {
   }, [notification])
 
   const syncData = async () => {
-    if (user) {
+    if (user && validUser) {
       try {
-        // const url = '/.netlify/functions/full-sync'
-        const url = '/.netlify/functions/test'
+        const url = '/.netlify/functions/full-sync'
+        // const url = '/.netlify/functions/test'
         const request = await fetch(url, user && {
           headers: {
             Authorization: 'Bearer ' + user.token.access_token
           }
         })
-        console.log('request', request)
         const response = await request.json()
-        console.log('xxx', {
-          "statusCode": request.status,
-          'body': response
-        })
         setNotification({
           "statusCode": request.status,
           // "statusCode": 200,
@@ -107,7 +107,7 @@ export default function Home() {
     <>
       <header style={stylesHeader}>
         <img src="./dm-logo.svg" alt="design miami logo" width={100} />
-        {loggedIn ? (
+        {loggedIn && user && validUser ? (
           <button
             style={stylesBtnAuth}
             onClick={() => {
@@ -129,7 +129,7 @@ export default function Home() {
         </Head>
 
         <main>
-          {loggedIn ? (
+          {loggedIn && user && validUser ? (
             <button
               style={stylesBtnSync}
               onClick={syncData}
