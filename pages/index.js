@@ -66,8 +66,11 @@ export default function Home() {
       setLoggedIn(!!user)
     })
   }
+  console.log('netlifyIdentity', netlifyIdentity)
 
-
+console.log('loggedin', loggedIn)
+console.log('user',  user)
+console.log('validUser',  validUser)
   return (
     <>
       <header className='header container'>
