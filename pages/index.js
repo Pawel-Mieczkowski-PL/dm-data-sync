@@ -75,11 +75,12 @@ export default function Home() {
             Authorization: 'Bearer ' + user.token.access_token
           }
         })
+        console.log('request', request)
         const response = await request.json()
         setNotification({
-          // "statusCode": request.status,
-          "statusCode": 200,
-          'message': response
+          "statusCode": request.status,
+          // "statusCode": 200,
+          'body': response
         })
       } catch (err) {
         setNotification({
