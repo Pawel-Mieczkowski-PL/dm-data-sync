@@ -68,7 +68,9 @@ export default function Home() {
   const syncData = async () => {
     if (user) {
       try {
-        const request = await fetch('/.netlify/functions/full-sync', user && {
+        // const url = '/.netlify/functions/full-sync'
+        const url = '/.netlify/functions/test'
+        const request = await fetch(url, user && {
           headers: {
             Authorization: 'Bearer ' + user.token.access_token
           }
@@ -131,7 +133,7 @@ export default function Home() {
             </button>
           ) : null}
         </main>
-        {notification ? <div className={`notification notification--${notification?.statusCode === 200 ? 'ok' : 'error'}`}>{notification?.body?.message}</div> : null}
+        {notification ? <div className={`notification notification--${notification?.statusCode === 200 ? 'ok' : 'error'}`}>{notification?.message}</div> : null}
 
         {/* <Footer /> */}
 
