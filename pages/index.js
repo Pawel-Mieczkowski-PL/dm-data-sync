@@ -22,7 +22,7 @@ export default function Home() {
       if (isCurrent) {
         setLoggedIn(!!user)
       }
-      if (user.token.expires_at < new Date().getTime()){
+      if (user?.token?.expires_at < new Date().getTime()){
         netlifyIdentity.refresh().then(token => location.reload())
       }
     })
