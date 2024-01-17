@@ -7,7 +7,7 @@ export const handler: Handler = async (event, context) => {
     if (!context?.clientContext?.user) {
       return {
         statusCode: 401,
-        body: JSON.stringify({ message: 'function full-sync: ah ah ah, you must be logged into see this' })
+        body: JSON.stringify({ message: 'You must be logged' })
       }
     }
 

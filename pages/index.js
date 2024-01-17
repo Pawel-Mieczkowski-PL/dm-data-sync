@@ -19,9 +19,11 @@ export default function Home() {
   useEffect(() => {
     let isCurrent = true
     netlifyAuth.initialize((user) => {
-      console.log('isCurrent', isCurrent, user);
       if (isCurrent) {
         setLoggedIn(!!user)
+      }
+      if (user) {
+        netlifyIdentity.refresh()
       }
     })
 
