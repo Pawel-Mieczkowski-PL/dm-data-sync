@@ -19,6 +19,7 @@ export default function Home() {
   useEffect(() => {
     let isCurrent = true
     netlifyAuth.initialize((user) => {
+      console.log('isCurrent', isCurrent, user);
       if (isCurrent) {
         setLoggedIn(!!user)
       }
@@ -66,11 +67,6 @@ export default function Home() {
       setLoggedIn(!!user)
     })
   }
-  console.log('netlifyIdentity', netlifyIdentity)
-
-console.log('loggedin', loggedIn)
-console.log('user',  user)
-console.log('validUser',  validUser)
   return (
     <>
       <header className='header container'>
@@ -84,7 +80,7 @@ console.log('validUser',  validUser)
               })
             }}
           >
-            Log out
+            Log out{user?.user_metadata?.full_name ? <span style={{opacity: .6, marginLeft: '10px'}}>{user.user_metadata.full_name}</span> : null}
           </button>
         ) : (
           <button className='button-auth button-auth--login' onClick={login}>Log in</button>
