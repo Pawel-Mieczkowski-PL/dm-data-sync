@@ -9,7 +9,8 @@
     "export": "next export",
     "netlify_dev": "netlify dev",
     "netlify_invoke": "netlify functions:invoke",
-    "netlify_serve": "netlify functions:serve"
+    "netlify_serve": "netlify functions:serve",
+    "netlify_create": "netlify functions:create --name full-sync-background"
   },
   "dependencies": {
     "@material/web": "^1.1.1",

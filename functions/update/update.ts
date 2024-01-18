@@ -123,7 +123,7 @@ export const sanityAlgolia = indexer(
   (document: SanityDocumentStub) => {
     switch (document._type) {
       case 'product':
-        console.log('product', document)
+        // console.log('product', document)
         //iterate over the category tree to build category tree with images
         //define categories
         let categories = {
@@ -243,7 +243,7 @@ export const sanityAlgolia = indexer(
           transactionURL: document.transactionURL,
         }
       case 'article':
-        console.log('article', document)
+        // console.log('article', document)
         return {
           objectID: document._id,
           title: document.title,
@@ -256,7 +256,7 @@ export const sanityAlgolia = indexer(
           body: document.body,
         }
       case 'seller':
-        console.log('seller', document)
+        // console.log('seller', document)
         return {
           objectID: document._id,
           title: document.title,
@@ -279,7 +279,7 @@ export const sanityAlgolia = indexer(
   // visibility scheme you may be using.
   (document: SanityDocumentStub) => {
     if (document.hasOwnProperty('isHidden')) {
-      console.log('hidden')
+      // console.log('hidden')
       return false
     }
     return true
