@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "export": "next export"
+    "export": "next export",
+    "netlify_dev": "netlify dev",
+    "netlify_invoke": "netlify functions:invoke",
+    "netlify_serve": "netlify functions:serve"
   },
   "dependencies": {
     "@material/web": "^1.1.1",

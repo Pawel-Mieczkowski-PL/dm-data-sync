@@ -22,7 +22,7 @@ export default function Home() {
       if (isCurrent) {
         setLoggedIn(!!user)
       }
-      if (user?.token?.expires_at < new Date().getTime()){
+      if (user?.token?.expires_at < new Date().getTime()) {
         netlifyIdentity.refresh().then(token => location.reload())
       }
     })
@@ -46,7 +46,8 @@ export default function Home() {
         const request = await fetch(url, user && {
           headers: {
             Authorization: 'Bearer ' + user.token.access_token
-          }
+          },
+          method: "POST"
         })
         const response = await request.json()
         setNotification({
@@ -82,7 +83,7 @@ export default function Home() {
               })
             }}
           >
-            Log out{user?.user_metadata?.full_name ? <span style={{opacity: .6, marginLeft: '10px'}}>{user.user_metadata.full_name}</span> : null}
+            Log out{user?.user_metadata?.full_name ? <span style={{ opacity: .6, marginLeft: '10px' }}>{user.user_metadata.full_name}</span> : null}
           </button>
         ) : (
           <button className='button-auth button-auth--login' onClick={login}>Log in</button>
