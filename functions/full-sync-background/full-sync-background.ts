@@ -4,6 +4,16 @@ import { sanity, sanityAlgolia } from '../update/update'
 export const handler: Handler = async (event, context) => {
   {
 
+
+    console.log(event); // this is showing correctly
+    console.log("eventbody is", event.body); // this is undefined
+    return;
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ message: 'YXXXou must be logged' })
+    }
+
     if (!context?.clientContext?.user) {
       return {
         statusCode: 401,
