@@ -4,7 +4,7 @@ import { sanity, sanityAlgolia } from '../update/update'
 export const handler: Handler = async (event, context) => {
   {
 
-    const destination = 'https://dm-data-sync.netlify.app/.netlify/functions/testd'
+    const destination = 'https://dm-data-sync.netlify.app/.netlify/functions/test'
     const timeout = 15 // seconds
     const sleep = (seconds) =>
       Promise.resolve(() => setTimeout(resolve, +seconds * 1000))
