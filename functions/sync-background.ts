@@ -1,30 +1,41 @@
 import { Handler } from '@netlify/functions'
-import { sanity, sanityAlgolia } from '../update/update'
+import { sanity, sanityAlgolia } from './update'
 
 export const handler: Handler = async (event, context) => {
   {
 
-    const destination = 'https://dm-data-sync.netlify.app/.netlify/functions/test'
-    const timeout = 15 // seconds
-    const sleep = (seconds) =>
-      Promise.resolve(() => setTimeout(resolve, +seconds * 1000))
+    // if (!context?.clientContext?.user) {
+    //   return {
+    //     statusCode: 401,
+    //     body: JSON.stringify({ message: 'You must be logged' })
+    //   }
+    // }
 
-    // Simulating fake long running sequence
-    console.log(
-      `[INIT] Beginning to process data. This may take a while ~${timeout} seconds...`
-    )
-    await sleep(timeout) // seconds
-    console.log(`[SUCCESS] Done processing after ${timeout} seconds...`)
-    console.log(`Sending data to destination: ${destination}...`)
+    const _sanity = sanity // configured Sanity client
+    const _sanityAlgolia = sanityAlgolia // configured sanity-algolia
 
-    // Sending data to a destination
-    fetch(destination, {
-      method: "POST",
-      body: JSON.stringify({
-        message: `Successfully processed request with ID: ${Math.random() * 1000
-          }`,
-        date: new Date().toGMTString(),
-      }),
-    })
+    // Fetch the _id of all the documents we want to index
+    const types = ['article', 'seller', 'product']
+    const query = `* [_type in $types && !(_id in path("drafts.**"))][]._id`
+
+    return _sanity
+      .fetch(query, { types })
+      .then((ids) => {
+        ids = JSON.stringify(ids)
+        const body = `{"projectId":"v2n4gj8r","dataset":"production","ids":{"created":${ids},"deleted":[],"updated":[]}}`
+        _sanityAlgolia.webhookSync(_sanity, JSON.parse(body))
+      })
+      .then(() => {
+        return {
+          statusCode: 200,
+          body: JSON.stringify({ message: 'Synchronization is running. This process can take up to 10 minutes, depending on the size of the data.' })
+        }
+      })
+      .catch((err) => {
+        return {
+          statusCode: 500,
+          body: JSON.stringify({ message: err }),
+        }
+      })
   }
 }

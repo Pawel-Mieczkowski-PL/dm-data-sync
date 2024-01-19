@@ -41,7 +41,7 @@ export default function Home() {
   const syncData = async () => {
     if (user && validUser) {
       try {
-        const url = '/.netlify/functions/full-sync-background'
+        const url = '/.netlify/functions/sync-background'
         // const url = '/.netlify/functions/test'
         const request = await fetch(url, user && {
           headers: {
