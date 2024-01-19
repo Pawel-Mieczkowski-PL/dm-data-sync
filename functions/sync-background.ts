@@ -1,5 +1,5 @@
 import { Handler } from '@netlify/functions'
-import { sanity, sanityAlgolia } from './update'
+import { sanity, sanityAlgolia } from './update/update'
 
 export const handler: Handler = async (event, context) => {
   {
