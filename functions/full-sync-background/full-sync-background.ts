@@ -1,5 +1,6 @@
 import { Handler } from '@netlify/functions'
 import { sanity } from '../update/update'
+const fetch = require("node-fetch")
 
 export const handler: Handler = async (event, context) => {
   {
@@ -11,25 +12,32 @@ export const handler: Handler = async (event, context) => {
       }
     }
 
+    try {
+      const destination = '/.netlify/functions/set-data'
 
-    const destination = '/.netlify/functions/set-data'
+      // Fetch the _id of all the documents we want to index
+      const types: any = ['article', 'seller', 'product']
+      const query: string = `* [_type in $types && !(_id in path("drafts.**"))][]._id`
 
-    // Fetch the _id of all the documents we want to index
-    const types: any = ['article', 'seller', 'product']
-    const query: string = `* [_type in $types && !(_id in path("drafts.**"))][]._id`
+      const request = await sanity.fetch(query, { types });
+      const ids = await request.json()
 
-    const request = await sanity.fetch(query, { types });
-    const ids = await request.json()
-
-    fetch(destination, {
-      method: "POST",
-      headers: {
-        Authorization: 'Bearer ' + context?.clientContext?.user
-      },
-      body: JSON.stringify({
-        ids: ids,
-      }),
-    })
+      fetch(destination, {
+        method: "POST",
+        headers: {
+          Authorization: 'Bearer ' + context?.clientContext?.user
+        },
+        body: JSON.stringify({
+          ids: ids,
+        }),
+      })
+    } catch (e) {
+      console.log({ e });
+      return {
+        statusCode: 500,
+        message: e
+      }
+    }
 
     // const destination = 'https://dm-data-sync.netlify.app/.netlify/functions/test'
     // const timeout = 15 // seconds
