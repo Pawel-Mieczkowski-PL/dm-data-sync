@@ -1,5 +1,6 @@
 import { Handler } from '@netlify/functions'
 import { sanity, sanityAlgolia } from '../update/update'
+var fs = require('fs');
 
 export const handler: Handler = async (event, context) => {
 
@@ -7,10 +8,13 @@ export const handler: Handler = async (event, context) => {
   try {
     const { ids } = JSON.parse(event.body);
     console.log('ids', ids)
+
     const _sanity = sanity // configured Sanity client
     const _sanityAlgolia = sanityAlgolia // configured sanity-algolia
 
     const body = `{"projectId":"${process.env['SANITY_PROJECT_ID']}","dataset":"production","ids":{"created":${ids},"deleted":[],"updated":[]}}`
+    // console.log('body', body);
+    
     _sanityAlgolia.webhookSync(_sanity, JSON.parse(body))
 
     return {

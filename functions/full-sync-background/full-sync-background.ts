@@ -1,26 +1,27 @@
 import { Handler } from '@netlify/functions'
 import { sanity } from '../update/update'
-const fetch = require("node-fetch")
+const fetch = require("node-fetch");
 
 export const handler: Handler = async (event, context) => {
   {
 
-    if (!context?.clientContext?.user) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({ message: 'You must be logged' })
-      }
-    }
+    // if (!context?.clientContext?.user) {
+    //   return {
+    //     statusCode: 401,
+    //     body: JSON.stringify({ message: 'You must be logged' })
+    //   }
+    // }
 
     try {
-      const destination = '/.netlify/functions/set-data'
+      const destination = 'http://localhost:9999/.netlify/functions/set-data'
 
       // Fetch the _id of all the documents we want to index
       const types: any = ['article', 'seller', 'product']
       const query: string = `* [_type in $types && !(_id in path("drafts.**"))][]._id`
 
-      const request = await sanity.fetch(query, { types });
-      const ids = await request.json()
+      const ids = await sanity.fetch(query, { types });
+
+      console.log('destination', destination)
 
       fetch(destination, {
         method: "POST",
@@ -28,7 +29,7 @@ export const handler: Handler = async (event, context) => {
           Authorization: 'Bearer ' + context?.clientContext?.user
         },
         body: JSON.stringify({
-          ids: ids,
+          ids
         }),
       })
     } catch (e) {
