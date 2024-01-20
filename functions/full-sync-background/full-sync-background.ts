@@ -25,9 +25,9 @@ export const handler: Handler = async (event, context) => {
 
       fetch(destination, {
         method: "POST",
-        headers: {
-          Authorization: 'Bearer ' + context?.clientContext?.user
-        },
+        // headers: {
+        //   Authorization: 'Bearer ' + context?.clientContext?.user
+        // },
         body: JSON.stringify({
           ids
         }),
