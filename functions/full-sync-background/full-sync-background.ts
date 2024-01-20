@@ -1,6 +1,6 @@
 import { Handler } from '@netlify/functions'
 import { sanity } from '../update/update'
-const fetch = require("node-fetch");
+import fetch  from "node-fetch";
 
 export const handler: Handler = async (event, context) => {
   {
@@ -13,7 +13,7 @@ export const handler: Handler = async (event, context) => {
     // }
 
     try {
-      const destination = 'http://localhost:9999/.netlify/functions/set-data'
+      const destination = '/.netlify/functions/set-data'
 
       // Fetch the _id of all the documents we want to index
       const types: any = ['article', 'seller', 'product']

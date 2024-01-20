@@ -7,15 +7,24 @@ export const handler: Handler = async (event, context) => {
 
   try {
     const { ids } = JSON.parse(event.body);
-    console.log('ids', ids)
 
     const _sanity = sanity // configured Sanity client
     const _sanityAlgolia = sanityAlgolia // configured sanity-algolia
 
-    const body = `{"projectId":"${process.env['SANITY_PROJECT_ID']}","dataset":"production","ids":{"created":${ids},"deleted":[],"updated":[]}}`
+    // const body = `{"projectId":"${process.env['SANITY_PROJECT_ID']}","dataset":"production","}`
     // console.log('body', body);
-    
-    _sanityAlgolia.webhookSync(_sanity, JSON.parse(body))
+
+    const bodyObj = {
+      projectId: process.env['SANITY_PROJECT_ID'],
+      "dataset": "production",
+      ids: {
+        "created": ids,
+        "deleted": [],
+        "updated": []
+      }
+    }
+
+    _sanityAlgolia.webhookSync(_sanity, bodyObj)
 
     return {
       statusCode: 200,
