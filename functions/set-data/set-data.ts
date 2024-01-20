@@ -6,6 +6,7 @@ export const handler: Handler = async (event, context) => {
 
   try {
     const { ids } = JSON.parse(event.body);
+    console.log('ids', ids)
     const _sanity = sanity // configured Sanity client
     const _sanityAlgolia = sanityAlgolia // configured sanity-algolia
 
