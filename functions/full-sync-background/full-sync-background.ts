@@ -13,15 +13,13 @@ export const handler: Handler = async (event, context) => {
     // }
 
     try {
-      const destination = '/.netlify/functions/set-data'
+      const destination = 'https://dm-data-sync.netlify.app/.netlify/functions/set-data'
 
       // Fetch the _id of all the documents we want to index
       const types: any = ['article', 'seller', 'product']
       const query: string = `* [_type in $types && !(_id in path("drafts.**"))][]._id`
 
       const ids = await sanity.fetch(query, { types });
-
-      console.log('destination', destination)
 
       fetch(destination, {
         method: "POST",
