@@ -24,6 +24,9 @@ export const handler: Handler = async (event, context) => {
       }
     }
 
+    console.log('bodyObj', bodyObj);
+    
+
     _sanityAlgolia.webhookSync(_sanity, bodyObj)
 
     return {
