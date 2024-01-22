@@ -24,7 +24,10 @@ export const handler: Handler = async (event, context) => {
       }
     }
 
-    console.log('bodyObj', bodyObj);
+    console.log('bodyObj', {
+      projectId: process.env['SANITY_PROJECT_ID'],
+      "dataset": "production"
+    });
     
 
     _sanityAlgolia.webhookSync(_sanity, bodyObj)
