@@ -1,5 +1,5 @@
 import { Handler } from '@netlify/functions'
-import { sanity } from '../update/update'
+import { sanity, sanityAlgolia } from '../update/update'
 import fetch  from "node-fetch";
 
 export const handler: Handler = async (event, context) => {
@@ -20,6 +20,19 @@ export const handler: Handler = async (event, context) => {
       const query: string = `* [_type in $types && !(_id in path("drafts.**"))][]._id`
 
       const ids = await sanity.fetch(query, { types });
+      const bodyObj = {
+        projectId: process.env['SANITY_PROJECT_ID'],
+        "dataset": "production",
+        ids: {
+          "created": ids,
+          "deleted": [],
+          "updated": []
+        }
+      }
+  
+      
+  
+      const req = await sanityAlgolia.webhookSync(sanity, bodyObj)
 
       fetch(destination, {
         method: "POST",
@@ -27,7 +40,8 @@ export const handler: Handler = async (event, context) => {
         //   Authorization: 'Bearer ' + context?.clientContext?.user
         // },
         body: JSON.stringify({
-          ids
+          ids,
+          req
         }),
       })
     } catch (e) {
