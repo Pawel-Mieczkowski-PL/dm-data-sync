@@ -5,30 +5,30 @@ import fetch  from "node-fetch";
 export const handler: Handler = async (event, context) => {
   {
 
-    // if (!context?.clientContext?.user) {
-    //   return {
-    //     statusCode: 401,
-    //     body: JSON.stringify({ message: 'You must be logged' })
-    //   }
-    // }
+    if (!context?.clientContext?.user) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({ message: 'You must be logged' })
+      }
+    }
 
     try {
       const destination = 'https://dm-data-sync.netlify.app/.netlify/functions/set-data'
 
       // Fetch the _id of all the documents we want to index
-      const types: any = ['article', 'seller', 'product']
-      const query: string = `* [_type in $types && !(_id in path("drafts.**"))][]._id`
+      // const types: any = ['article', 'seller', 'product']
+      // const query: string = `* [_type in $types && !(_id in path("drafts.**"))][]._id`
 
-      const ids = await sanity.fetch(query, { types });
-      const bodyObj = {
-        projectId: process.env['SANITY_PROJECT_ID'],
-        "dataset": "production",
-        ids: {
-          "created": ids,
-          "deleted": [],
-          "updated": []
-        }
-      }
+      // const ids = await sanity.fetch(query, { types });
+      // const bodyObj = {
+      //   projectId: process.env['SANITY_PROJECT_ID'],
+      //   "dataset": "production",
+      //   ids: {
+      //     "created": ids,
+      //     "deleted": [],
+      //     "updated": []
+      //   }
+      // }
   
       
   
@@ -39,10 +39,10 @@ export const handler: Handler = async (event, context) => {
         // headers: {
         //   Authorization: 'Bearer ' + context?.clientContext?.user
         // },
-        body: JSON.stringify({
-          ids,
-          req
-        }),
+        // body: JSON.stringify({
+        //   ids,
+        //   req
+        // }),
       })
     } catch (e) {
       console.log({ e });
