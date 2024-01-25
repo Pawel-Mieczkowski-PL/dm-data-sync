@@ -49,6 +49,7 @@ export default function Home() {
           },
           method: "POST"
         })
+        console.log('response', request)
         const response = await request.json()
         setNotification({
           "statusCode": request.status,
