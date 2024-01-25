@@ -49,12 +49,12 @@ export default function Home() {
           },
           method: "POST"
         })
-        console.log('response', request)
-        const response = await request.json()
+        // console.log('response', request)
+        // const response = await request.json()
         setNotification({
           "statusCode": request.status,
           // "statusCode": 200,
-          'body': response
+          'body': 'Synchronization is running. This process can take up to 10 minutes, depending on the size of the data.''
         })
       } catch (err) {
         setNotification({
@@ -106,7 +106,7 @@ export default function Home() {
           </button>
         ) : null}
       </main>
-      <div className={`notification ${notification ? 'notification--active' : ''} notification--${notification?.statusCode === 200 ? 'ok' : 'error'}`}>{notification?.body?.message}</div>
+      <div className={`notification ${notification ? 'notification--active' : ''} notification--${notification?.statusCode === 200 || notification?.statusCode === 202 ? 'ok' : 'error'}`}>{notification?.body?.message}</div>
 
       {/* <Footer /> */}
 
