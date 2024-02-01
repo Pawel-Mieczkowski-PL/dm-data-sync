@@ -54,7 +54,7 @@ export default function Home() {
         setNotification({
           "statusCode": request.status,
           // "statusCode": 200,
-          'body': 'Synchronization is running. This process can take up to 10 minutes, depending on the size of the data.''
+          'body': 'Synchronization is running. This process can take up to 10 minutes, depending on the size of the data.'
         })
       } catch (err) {
         setNotification({
