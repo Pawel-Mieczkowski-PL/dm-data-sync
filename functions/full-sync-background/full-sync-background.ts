@@ -5,12 +5,12 @@ import fetch  from "node-fetch";
 export const handler: Handler = async (event, context) => {
   {
 
-    if (!context?.clientContext?.user) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({ message: 'You must be logged' })
-      }
-    }
+    // if (!context?.clientContext?.user) {
+    //   return {
+    //     statusCode: 401,
+    //     body: JSON.stringify({ message: 'You must be logged' })
+    //   }
+    // }
 
     try {
       const destination = 'https://dm-data-sync.netlify.app/.netlify/functions/set-data'
