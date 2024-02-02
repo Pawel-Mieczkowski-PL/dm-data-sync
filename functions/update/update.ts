@@ -311,6 +311,8 @@ export const handler: Handler = async (event, context) => {
   // inspect the webhook payload, make queries back to Sanity with the `sanity`
   // client and make sure the algolia indices are synced to match.
 
+console.log('event.body', event.body)
+  return false;
   return sanityAlgolia
     .webhookSync(sanity, JSON.parse(event.body))
     .then(() => {
