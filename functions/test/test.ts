@@ -303,7 +303,7 @@ export const handler: Handler = async (event, context) => {
     }
   }
 
-  console.log('test 1')
+  console.log('test 1sada')
 
   return sanityAlgolia
     .webhookSync(sanity, JSON.parse(event.body))
