@@ -305,6 +305,8 @@ export const handler: Handler = async (event, context) => {
 
   console.log('test', JSON.parse(event.body))
 
+  return false;
+
   return sanityAlgolia
     .webhookSync(sanity, JSON.parse(event.body))
     .then(() => {
