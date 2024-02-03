@@ -278,7 +278,7 @@ export const sanityAlgolia = indexer(
   // implement any `publishedAt` datetime visibility rules or other custom
   // visibility scheme you may be using.
   (document: SanityDocumentStub) => {
-    ConstantSourceNode.log('document', document)
+    console.log('document', document)
     if (document.hasOwnProperty('isHidden')) {
       console.log('hidden')
       return false
