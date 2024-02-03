@@ -121,7 +121,7 @@ export const sanityAlgolia = indexer(
   // it is sent to Algolia.
   (document: SanityDocumentStub) => {
     
-  console.log('document', document)
+  console.log('document xxx', document)
     switch (document._type) {
       case 'product':
         console.log('product', document)
@@ -279,6 +279,7 @@ export const sanityAlgolia = indexer(
   // implement any `publishedAt` datetime visibility rules or other custom
   // visibility scheme you may be using.
   (document: SanityDocumentStub) => {
+    console.log('document zzz', document)
     if (document.hasOwnProperty('isHidden')) {
       console.log('hidden')
       return false
