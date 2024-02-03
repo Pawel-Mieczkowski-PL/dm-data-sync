@@ -308,6 +308,9 @@ export const handler: Handler = async (event, context) => {
   const body = JSON.parse(event.body)
   const ids = body.ids.all
   const testID = '7a3f65d9-322e-49fa-bd4f-653f102e7351'
+
+  console.log('ids', ids)
+  console.log('condition', ids.includes(testID))
   if (!ids.includes(testID)) {
     return false;
   }
