@@ -305,8 +305,20 @@ export const handler: Handler = async (event, context) => {
 
   console.log('test 1')
 
-  const req = await sanityAlgolia.webhookSync(sanity, JSON.parse(event.body))
-  console.log('test 1req', req)
+  return sanityAlgolia
+    .webhookSync(sanity, JSON.parse(event.body))
+    .then(() => {
+      return {
+        statusCode: 200,
+        body: JSON.parse(event.body),
+      }
+    })
+    .catch((err) => {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ message: err }),
+      }
+    })
  
 
 
