@@ -307,7 +307,7 @@ export const handler: Handler = async (event, context) => {
   // client and make sure the algolia indices are synced to match.
   const body = JSON.parse(event.body)
   const ids = body.ids.all
-  const testID = '7a3f65d9-322e-49fa-bd4f-653f102e7351'
+  const testID = '1e984725-16db-4920-83b2-cc9f58b16663'
 
   console.log('ids', ids)
   console.log('condition', ids.includes(testID))
