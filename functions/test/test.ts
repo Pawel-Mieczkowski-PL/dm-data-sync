@@ -303,8 +303,19 @@ export const handler: Handler = async (event, context) => {
     }
   }
 
-  console.log('test')
-  console.log('sanityAlgolia0', sanityAlgolia)
+  console.log('test 1')
+
+  const req = await sanityAlgolia.webhookSync(sanity, JSON.parse(event.body))
+  console.log('test 1req', req)
+ 
+
+
+  //     .then(() => {
+  //       return {
+  //         statusCode: 200,
+  //         body: JSON.parse(event.body),
+  //       }
+  //     })
 
   return true;
   // Finally connect the Sanity webhook payload to Algolia indices via the
