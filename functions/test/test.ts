@@ -116,11 +116,12 @@ export const sanityAlgolia = indexer(
       }`,
     },
   },
-  console.log('document', document)
   // The second parameter is a function that maps from a fetched Sanity document
   // to an Algolia Record. Here you can do further mutations to the data before
   // it is sent to Algolia.
   (document: SanityDocumentStub) => {
+    
+  console.log('document', document)
     switch (document._type) {
       case 'product':
         console.log('product', document)
