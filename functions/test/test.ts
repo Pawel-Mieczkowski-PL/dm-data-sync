@@ -319,6 +319,7 @@ console.log('event.body X', JSON.parse(event.body))
   return sanityAlgolia
     .webhookSync(sanity, JSON.parse(event.body))
     .then(() => {
+        console.log('ok')
       return {
         statusCode: 200,
         body: JSON.parse(event.body),
