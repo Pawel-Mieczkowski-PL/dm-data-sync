@@ -126,7 +126,6 @@ export const sanityAlgolia = indexer(
   (document: SanityDocumentStub) => {
     switch (document._type) {
       case 'product':
-        console.log('product', document)
         //iterate over the category tree to build category tree with images
         //define categories
         let categories = {
@@ -264,7 +263,6 @@ export const sanityAlgolia = indexer(
           hidden: hiddenArticle,
         }
       case 'seller':
-        console.log('seller', document)
         return {
           objectID: document._id,
           title: document.title,
@@ -286,7 +284,6 @@ export const sanityAlgolia = indexer(
   // implement any `publishedAt` datetime visibility rules or other custom
   // visibility scheme you may be using.
   (document: SanityDocumentStub) => {
-    console.log('document', document)
     if (document.hasOwnProperty('isHidden')) {
       console.log('hidden')
       return false
@@ -316,6 +313,8 @@ export const handler: Handler = async (event, context) => {
   // event['body'] = `{"transactionId":"liTIJAQ0HaLg2cM3viNslP","projectId":"v2n4gj8r","dataset":"production","ids":{"created":["${id}"],"deleted":[],"updated":[],"all":["${id}"]}}`
   
   try {
+
+    console.log('event', event)
     const body = JSON.parse(event.body)
     await sanityAlgolia.webhookSync(sanity, body)
 
