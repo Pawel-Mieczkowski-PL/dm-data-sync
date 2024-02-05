@@ -313,8 +313,6 @@ export const handler: Handler = async (event, context) => {
   // event['body'] = `{"transactionId":"liTIJAQ0HaLg2cM3viNslP","projectId":"v2n4gj8r","dataset":"production","ids":{"created":["${id}"],"deleted":[],"updated":[],"all":["${id}"]}}`
   
   try {
-
-    console.log('event', event)
     const body = JSON.parse(event.body)
     await sanityAlgolia.webhookSync(sanity, body)
 
