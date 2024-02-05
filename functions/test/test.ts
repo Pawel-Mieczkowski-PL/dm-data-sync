@@ -20,6 +20,8 @@ export const sanity = createClient({
   useCdn: false,
 })
 
+const notPublishedItems = []
+
 export const sanityAlgolia = indexer(
   // The first parameter maps a Sanity document type to its respective Algolia
   // search index. In this example both `post` and `article` Sanity types live
@@ -100,6 +102,7 @@ export const sanityAlgolia = indexer(
         "author":author->name,
         "column":columnName->title,
         "description":subtitle,
+        "publication":publication,
         "thumbnail":mediaArticle[0].media[0].asset->url,
         "body": pt::text(bodycontent),
       }`,
@@ -243,7 +246,11 @@ export const sanityAlgolia = indexer(
           transactionURL: document.transactionURL,
         }
       case 'article':
-        console.log('article', document)
+        let hiddenArticle = document?.publication === "no";
+
+        if (hiddenArticle && !notPublishedItems.includes(document._id)) {
+          notPublishedItems.push(document._id)
+        }
         return {
           objectID: document._id,
           title: document.title,
@@ -254,6 +261,7 @@ export const sanityAlgolia = indexer(
           description: document.description,
           thumbnail: document.thumbnail,
           body: document.body,
+          hidden: hiddenArticle,
         }
       case 'seller':
         console.log('seller', document)
@@ -291,44 +299,48 @@ export const handler: Handler = async (event, context) => {
   // Tip: Add webhook secrets to verify that the request is coming from Sanity.
   // See more at: https://www.sanity.io/docs/webhooks#bfa1758643b3
 
-  if (
-    event.headers['content-type'] !== 'application/json' ||
-    !event.body ||
-    !event.body.length
-  ) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ message: 'Bad request' }),
-    }
-  }
+  //   event.headers['content-type'] !== 'application/json' ||
+  //   !event.body ||
+  //   !event.body.length
+  // ) {
+  //   return {
+  //     statusCode: 400,
+  //     body: JSON.stringify({ message: 'Bad request' }),
+  //   }
+  // }
   // Finally connect the Sanity webhook payload to Algolia indices via the
   // configured serializers and optional visibility function. `webhookSync` will
   // inspect the webhook payload, make queries back to Sanity with the `sanity`
   // client and make sure the algolia indices are synced to match.
-  const body = JSON.parse(event.body)
-  const ids = body.ids.all
-  const testID = '1e984725-16db-4920-83b2-cc9f58b16663'
+  // const id = "a8aafb22-f3a3-4bd6-a90b-5ec098d5cc6c"
+  // event['body'] = `{"transactionId":"liTIJAQ0HaLg2cM3viNslP","projectId":"v2n4gj8r","dataset":"production","ids":{"created":["${id}"],"deleted":[],"updated":[],"all":["${id}"]}}`
+  
+  try {
+    const body = JSON.parse(event.body)
+    await sanityAlgolia.webhookSync(sanity, body)
 
-  console.log('event', event)
-  if (!ids.includes(testID)) {
-    return false;
+    const bodyToRemoveElements = Object.assign({}, body);
+    bodyToRemoveElements['ids'] = {
+      "created": [],
+      "deleted": notPublishedItems,
+      "updated": [],
+      "all": notPublishedItems
+    }
+
+
+
+    if (bodyToRemoveElements.ids?.deleted.length) {
+      await sanityAlgolia.webhookSync(sanity, bodyToRemoveElements)
+    }
+    return {
+      statusCode: 200,
+      body: 'ok',
+    }
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: err }),
+    }
   }
-console.log('event.body X', JSON.parse(event.body))
 
-  return sanityAlgolia
-    .webhookSync(sanity, JSON.parse(event.body))
-    .then(() => {
-        console.log('ok')
-      return {
-        statusCode: 200,
-        body: JSON.parse(event.body),
-      }
-    })
-    .catch((err) => {
-      console.error('err', err)
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ message: err }),
-      }
-    })
 }
