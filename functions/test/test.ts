@@ -309,8 +309,7 @@ export const handler: Handler = async (event, context) => {
   const ids = body.ids.all
   const testID = '1e984725-16db-4920-83b2-cc9f58b16663'
 
-  console.log('ids', ids)
-  console.log('condition', ids.includes(testID))
+  console.log('event', event)
   if (!ids.includes(testID)) {
     return false;
   }
