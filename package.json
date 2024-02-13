@@ -10,7 +10,7 @@
     "netlify_dev": "netlify dev",
     "netlify_invoke": "netlify functions:invoke",
     "netlify_serve": "netlify functions:serve",
-    "netlify_create": "netlify functions:create --name set-data"
+    "netlify_create": "netlify functions:create --name update-related-background"
   },
   "dependencies": {
     "@material/web": "^1.1.1",
