@@ -29,79 +29,81 @@ export const handler: Handler = async (event, context) => {
       }
     }`
 
-    try {
-      const response = await _sanity.fetch(query, { types })
-      const ids = await response.json()
-      console.log('ids', ids)
-      let outputIds = ids.map((id) => {
-        if (id.programs != null) {
-          let programs = id.programs
-            .map((program) => {
-              return program.ids.map((i) => `"${i}"`).join(',')
-            })
-            .filter(function (element) {
-              return element !== undefined
-            })
-            .join(',')
-          return programs
-        }
-        if (!Object.is(id.ids, null) && !Object.is(id.ids, undefined)) {
-          return id.ids.map((i) => `"${i}"`).join(',')
+    // try {
+    //   const response = await _sanity.fetch(query, { types })
+    //   const {ids} = response[0]
+    //   const outputIds = ids.map((id) => {
+    //     if (id.programs != null && id.programs != undefined) {
+    //       let programs = id.programs
+    //         .map((program) => {
+    //           return program.ids.map((i) => `"${i}"`).join(',')
+    //         })
+    //         .filter(function (element) {
+    //           return element !== undefined
+    //         })
+    //         .join(',')
+    //       return programs
+    //     }
+    //     if (!Object.is(id.ids, null) && !Object.is(id.ids, undefined)) {
+    //       return id.ids.map((i) => `"${i}"`).join(',')
+    //     }
+    //   })
+      
+    //   console.log('outputIds', outputIds)
+    //   const body = `{"projectId":"v2n4gj8r","dataset":"production","ids":{"created":[],"deleted":[],"updated":[${outputIds}]}}`
+    //   await _sanityAlgolia.webhookSync(_sanity, JSON.parse(body))
+    //   return {
+    //     statusCode: 200,
+    //     body: 'ok',
+    //   }
+    // } catch (err) {
+    //   console.log('err', err)
+    //   return {
+    //     statusCode: 500,
+    //     body: JSON.stringify({ message: err }),
+    //   }
+    // }
+    return _sanity
+      .fetch(query, { types })
+      .then((ids) => {
+        console.log(ids)
+        let outputIds = ids
+          .map((id) => {
+            if (id.programs != null) {
+              let programs = id.programs
+                .map((program) => {
+                  return program.ids.map((i) => `"${i}"`).join(',')
+                })
+                .filter(function (element) {
+                  return element !== undefined
+                })
+                .join(',')
+              return programs
+            }
+            if (!Object.is(id.ids, null) && !Object.is(id.ids, undefined)) {
+              return id.ids.map((i) => `"${i}"`).join(',')
+            }
+          })
+          .filter(function (element) {
+            return element !== undefined
+          })
+          .join(',')
+
+        const body = `{"projectId":"v2n4gj8r","dataset":"production","ids":{"created":[],"deleted":[],"updated":[${outputIds}]}}`
+        // console.log('body', body)
+        _sanityAlgolia.webhookSync(_sanity, JSON.parse(body))
+      })
+      .then(() => {
+        return {
+          statusCode: 200,
+          body: 'ok',
         }
       })
-      const body = `{"projectId":"v2n4gj8r","dataset":"production","ids":{"created":[],"deleted":[],"updated":[${outputIds}]}}`
-      await _sanityAlgolia.webhookSync(_sanity, JSON.parse(body))
-      return {
-        statusCode: 200,
-        body: 'ok',
-      }
-    } catch (err) {
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ message: err }),
-      }
-    }
-    // return _sanity
-    //   .fetch(query, { types })
-    //   .then((ids) => {
-    //     console.log(ids)
-    //     let outputIds = ids
-    //       .map((id) => {
-    //         if (id.programs != null) {
-    //           let programs = id.programs
-    //             .map((program) => {
-    //               return program.ids.map((i) => `"${i}"`).join(',')
-    //             })
-    //             .filter(function (element) {
-    //               return element !== undefined
-    //             })
-    //             .join(',')
-    //           return programs
-    //         }
-    //         if (!Object.is(id.ids, null) && !Object.is(id.ids, undefined)) {
-    //           return id.ids.map((i) => `"${i}"`).join(',')
-    //         }
-    //       })
-    //       .filter(function (element) {
-    //         return element !== undefined
-    //       })
-    //       .join(',')
-
-    //     const body = `{"projectId":"v2n4gj8r","dataset":"production","ids":{"created":[],"deleted":[],"updated":[${outputIds}]}}`
-    //     console.log('body', body)
-    //     _sanityAlgolia.webhookSync(_sanity, JSON.parse(body))
-    //   })
-    //   .then(() => {
-    //     return {
-    //       statusCode: 200,
-    //       body: 'ok',
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     return {
-    //       statusCode: 500,
-    //       body: JSON.stringify({ message: err }),
-    //     }
-    //   })
+      .catch((err) => {
+        return {
+          statusCode: 500,
+          body: JSON.stringify({ message: err }),
+        }
+      })
   }
 }
