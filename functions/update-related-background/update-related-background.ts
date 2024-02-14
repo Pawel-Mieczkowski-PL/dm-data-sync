@@ -7,13 +7,14 @@ export const handler: Handler = async (event, context) => {
 
     const _sanity = sanity // configured Sanity client
     const _sanityAlgolia = sanityAlgolia // configured sanity-algolia
+    console.log('event.body', event.body)
     const eventBody = JSON.parse(event.body)
 
     // Fetch the _id of all the documents we want to index
     const relatedTypes = ['seller', 'designer', 'category']
     const types = ['product']
     const relatedIds = JSON.stringify(JSON.parse(event.body).ids?.updated)
-    console.log('relatedIds', relatedIds)
+    // console.log('relatedIds', relatedIds)
     //const query = `* [_type in $types && references("${relatedIds}") &&!(_id in path("drafts.**"))][]._id`
     const query = `* [_id in ${relatedIds}][]{
       _type in ["designer","seller","materials"] => {
@@ -48,7 +49,7 @@ export const handler: Handler = async (event, context) => {
           return id.ids
         }
       })[0]
-      console.log('syncIds', syncIds)
+      // console.log('syncIds', syncIds)
 
       // const outputIds = ids.map((id) => {
       //   if (id.programs != null && id.programs != undefined) {
