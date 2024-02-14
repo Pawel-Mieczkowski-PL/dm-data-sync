@@ -7,8 +7,8 @@ export const handler: Handler = async (event, context) => {
 
     const _sanity = sanity // configured Sanity client
     const _sanityAlgolia = sanityAlgolia // configured sanity-algolia
-    console.log('event.body', event.body);
-    
+    const eventBody = JSON.parse(event.body)
+
     // Fetch the _id of all the documents we want to index
     const relatedTypes = ['seller', 'designer', 'category']
     const types = ['product']
@@ -29,40 +29,69 @@ export const handler: Handler = async (event, context) => {
       }
     }`
 
-    // try {
-    //   const response = await _sanity.fetch(query, { types })
-    //   const {ids} = response[0]
-    //   const outputIds = ids.map((id) => {
-    //     if (id.programs != null && id.programs != undefined) {
-    //       let programs = id.programs
-    //         .map((program) => {
-    //           return program.ids.map((i) => `"${i}"`).join(',')
-    //         })
-    //         .filter(function (element) {
-    //           return element !== undefined
-    //         })
-    //         .join(',')
-    //       return programs
-    //     }
-    //     if (!Object.is(id.ids, null) && !Object.is(id.ids, undefined)) {
-    //       return id.ids.map((i) => `"${i}"`).join(',')
-    //     }
-    //   })
-      
-    //   console.log('outputIds', outputIds)
-    //   const body = `{"projectId":"v2n4gj8r","dataset":"production","ids":{"created":[],"deleted":[],"updated":[${outputIds}]}}`
-    //   await _sanityAlgolia.webhookSync(_sanity, JSON.parse(body))
-    //   return {
-    //     statusCode: 200,
-    //     body: 'ok',
-    //   }
-    // } catch (err) {
-    //   console.log('err', err)
-    //   return {
-    //     statusCode: 500,
-    //     body: JSON.stringify({ message: err }),
-    //   }
-    // }
+    try {
+      const response = await _sanity.fetch(query, { types })
+      // const { ids } = response[0]
+      const syncIds = response.map((id) => {
+        if (id.programs != null && id.programs != undefined) {
+          let programs = id.programs
+            .map((program) => {
+              return program.ids
+            })
+            .filter(function (element) {
+              return element !== undefined
+            })
+            .join(',')
+          return programs
+        }
+        if (!Object.is(id.ids, null) && !Object.is(id.ids, undefined)) {
+          return id.ids
+        }
+      })[0]
+      console.log('syncIds', syncIds)
+
+      // const outputIds = ids.map((id) => {
+      //   if (id.programs != null && id.programs != undefined) {
+      //     let programs = id.programs
+      //       .map((program) => {
+      //         return program.ids.map((i) => `"${i}"`).join(',')
+      //       })
+      //       .filter(function (element) {
+      //         return element !== undefined
+      //       })
+      //       .join(',')
+      //     return programs
+      //   }
+      //   if (!Object.is(id.ids, null) && !Object.is(id.ids, undefined)) {
+      //     return id.ids.map((i) => `"${i}"`).join(',')
+      //   }
+      // })
+
+      const body = {
+        ...eventBody,
+        "ids": {
+          "created": [],
+          "deleted": [],
+          "updated": syncIds
+        }
+      }
+      console.log('body', body.ids)
+      await _sanityAlgolia.webhookSync(_sanity, body)
+      return {
+        statusCode: 200,
+        body: 'ok',
+      }
+    } catch (err) {
+      console.log('err', err)
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ message: err }),
+      }
+    }
+
+    return null;
+
+
     return _sanity
       .fetch(query, { types })
       .then((ids) => {
@@ -72,7 +101,8 @@ export const handler: Handler = async (event, context) => {
             if (id.programs != null) {
               let programs = id.programs
                 .map((program) => {
-                  return program.ids.map((i) => `"${i}"`).join(',')
+                  return program.ids
+                  // return program.ids.map((i) => `"${i}"`).join(',')
                 })
                 .filter(function (element) {
                   return element !== undefined
@@ -81,17 +111,24 @@ export const handler: Handler = async (event, context) => {
               return programs
             }
             if (!Object.is(id.ids, null) && !Object.is(id.ids, undefined)) {
-              return id.ids.map((i) => `"${i}"`).join(',')
+              // return id.ids.map((i) => `"${i}"`).join(',')
+              return id.ids
             }
           })
           .filter(function (element) {
             return element !== undefined
           })
-          .join(',')
 
-        const body = `{"projectId":"v2n4gj8r","dataset":"production","ids":{"created":[],"deleted":[],"updated":[${outputIds}]}}`
-        // console.log('body', body)
-        _sanityAlgolia.webhookSync(_sanity, JSON.parse(body))
+        const body = {
+          ...eventBody,
+          "ids": {
+            "created": [],
+            "deleted": [],
+            "updated": outputIds
+          }
+        }
+        console.log('body', body.ids)
+        _sanityAlgolia.webhookSync(_sanity, body)
       })
       .then(() => {
         return {
