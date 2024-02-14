@@ -76,7 +76,7 @@ export const handler: Handler = async (event, context) => {
           "updated": syncIds
         }
       }
-      console.log('body', body.ids)
+      // console.log('body', body.ids)
       await _sanityAlgolia.webhookSync(_sanity, body)
       return {
         statusCode: 200,
